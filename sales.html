@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>Halaman Customer</title>
+   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script> -->
+   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id = "dataitem">
+        <h3>Silakan Isi Data Berikut!</h3>
+        <p>1. Tanggal Transaksi  : <input type="text" size="20" name="tanggal_transaksi" v-model="tanggal_transaksi"></p>
+        <p>2. Nama Customer : <input type="text" size="20" name="nama_cust" v-model="nama_cust"></p>
+        <p>3. Item  : <input type="text" size="20" name="harga_satuan" v-model="harga_satuan"></p>
+        <p>4. Quantity : <input type="text" size="20" name="nama_cust" v-model="nama_cust"></p>
+        <p>5. Total Diskon : <input type="text" name="total_diskon" v-model="total_diskon" readonly>
+        <p>5. Total Harga : <input type="text" name="total_harga" v-model="total_harga" readonly>
+        <p>5. Total Bayar : <input type="text" size="20" name="total_bayar" v-model="total_bayar"></p>
+        <button @click="tambah">Simpan</button>
+        <hr>
+        <table id="salesapp" width="50%" cellspacing="15">
+           <thead>
+              <tr>
+               <th width="15%">Kode Transaksi</th>
+                 <th width="15%">Tanggal Transaksi</th>
+                 <th width="15%">Nama Customer</th>
+                 <th width="10%">Item</th>
+                 <th width="10%">Quantity</th>
+                 <th width="10%">Total Diskon</th>
+                 <th width="10%">Total Harga</th>
+                 <th width="10%">Total Bayar</th>
+                 <th width="20%">Tombol Hapus</th>
+               </tr>
+           </thead>
+           <tbody>
+              <tr v-for="(sale, index) in sales" :key="sales.code_transaksi">
+                 <td>{{sale.code_transaksi}}</td>
+                 <td>{{sale.tanggal_transaksi}}</td>
+                 <td>{{sale.nama_cust}}</td>
+                 <td>{{sale.nama_item}}</td>
+                 <td>{{sale.qty}}</td>
+                 <td>{{sale.total_diskon}}</td>
+                 <td>{{sale.total_harga}}</td>
+                 <td>{{sale.total_bayar}}</td>
+                 <td><button @click="hapus(index)">Hapus</button></td>
+              </tr>
+           </tbody>
+        </table>
+  </div>
+  
+  <script>
+   var salesapp = new Vue({
+     el: '#salesapp',
+     data: {
+       sales: []
+     },
+     mounted() {
+       this.fetchSales();
+     },
+     methods: {
+       fetchSales() {
+         fetch('/sales')
+           .then(response => response.json())
+           .then(data => {
+             this.sales = data.sales;
+           })
+           .catch(error => {
+             console.error('Error fetching sales:', error);
+           });
+       }
+     }
+   });
+ </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>Halaman Customer</title>
+   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script> -->
+   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+   <div id="datacustomer">
+      <h3>Silakan Isi Data Berikut!</h3>
+      <p>1. Nama : <input type="text" size="20" name="nama" v-model="nama"></p>
+      <p>2. Contact : <input type="text" size="20" name="contact" v-model="contact"></p>
+      <p>3. Email : <input type="text" size="20" name="email" v-model="email"></p>
+      <p>3. Alamat : <input type="text" size="20" name="alamat" v-model="alamat"></p>
+      <p>4. Diskon : <input type="text" size="20" name="alamat" v-model="alamat"></p>
+      <p>5. Tipe Diskon :
+         <select name="tipe_diskon" Size="1">
+            <option customer="default">--Option--</option>
+            <option customer="persentase">Persentase</option>
+            <option customer="fix">Fix</option>
+         </select>
+      <p>6. Foto KTP : <button class="btn btn-info" @click="onPickFile">Upload profile picture</button>
+         <input type="file" style="display: none" name="foto_ktp" ref="fileInput" accept="image/*" @change="onFilePicked" />
+         <br>
+         <button @click="tambah">Simpan</button>
+         <hr>
+      <table id="customerapp" width="75%" cellspacing="15">
+         <thead>
+            <tr>
+               <th width="30%">Nama</th>
+               <th width="20%">Contact</th>
+               <th width="40%">Email</th>
+               <th width="40%">Alamat</th>
+               <th width="10%">Diskon</th>
+               <th width="10%">Tipe Diskon</th>
+               <th width="20%">Foto KTP</th>
+               <th width="20%">Tombol Hapus</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr v-for="(customer, index) in customers" :key="customer.id_cust">
+               <td>{{customer.nama_cust}}</td>
+               <td>{{customer.contact}}</td>
+               <td>{{customer.email}}</td>
+               <td>{{customer.alamat}}</td>
+               <td>{{customer.diskon}}</td>
+               <td>{{customer.nama_tipe_diskon}}</td>
+               <td><img :src="link" /></td>
+               <td><button @click="hapus(index)">Hapus</button></td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+
+   <script>
+      var customerapp = new Vue({
+        el: '#customerapp',
+        data: {
+          customers: []
+        },
+        mounted() {
+          this.fetchCustomers();
+        },
+        methods: {
+          fetchCustomers() {
+            fetch('/customers')
+              .then(response => response.json())
+              .then(data => {
+                this.customers = data.customers;
+              })
+              .catch(error => {
+                console.error('Error fetching customers:', error);
+              });
+          }
+        }
+      });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <title>Halaman Item</title>
+      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script> -->
+      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+   </head>
+
+<body>
+    <div id = "isidata">
+        <h3>Silakan Isi Data Berikut!</h3>
+        <p>1. Nama Item  : <input type="text" size="20" name="nama_item" v-model="nama_item"></p>
+        <p>2. Unit  : 
+            <select name="unit" Size="1">
+                <option value="default">--Option--</option>
+                <option value="1">Kilogram</option>
+                <option value="2">Pieces</option>
+            </select>
+        <p>3. Harga Satuan  : <input type="text" size="20" name="harga_satuan" v-model="harga_satuan"></p>
+        <p>4. Gambar Barang  : <button class="btn btn-info" @click="onPickFile">Upload profile picture</button>
+            <input type="file" style="display: none" name="foto_ktp" ref="fileInput" accept="image/*" @change="onFilePicked"/>
+        <br>
+        <button @click="tambah">Simpan</button>
+        <hr>
+      <div id="itemapp">
+        <table id="dataTable" width="50%" cellspacing="15">
+           <thead>
+              <tr>
+                 <th width="20%">Nama Item</th>
+                 <th width="15%">Unit</th>
+                 <th width="20%">Harga Satuan</th>
+                 <th width="20%">Gambar Barang</th>
+                 <th width="20%">Tombol Hapus</th>
+               </tr>
+           </thead>
+           <tbody>
+            <tr v-for="(item, index) in items" :key="item.id_item">
+              <td>{{ item.nama_item }}</td>
+              <td>{{ item.nama_unit }}</td>
+              <td>{{ item.harga_satuan }}</td>
+              <td><img :src="item.gambar_barang" /></td>
+              <td><button @click="hapus(index)">Hapus</button></td>
+            </tr>
+          </tbody>
+        </table>
+  </div>
+
+   <script>
+      var itemapp = new Vue({
+        el: '#itemapp',
+        data: {
+          items: []
+        },
+        mounted() {
+          this.fetchItems();
+        },
+        methods: {
+          fetchItems() {
+            fetch('/items')
+              .then(response => response.json())
+              .then(data => {
+                this.items = data.items;
+              })
+              .catch(error => {
+                console.error('Error fetching items:', error);
+              });
+          }
+        }
+      });
+    </script>
+          
+</body>
+</html>
